@@ -1,0 +1,20 @@
+name: website_proxy_reverse
+
+services:
+  apache:
+    build: 
+      context: apache/
+      dockerfile: apache.Dockerfile
+    image: website_apache:1.0
+    container_name: website_apache
+    command: ["apachectl", "-D", "FOREGROUND"]
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - apache
